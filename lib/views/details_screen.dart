@@ -1,5 +1,6 @@
 import 'package:crud_firebase_app/controllers/fetch_data_controller.dart';
 import 'package:crud_firebase_app/model/data_list_model.dart';
+import 'package:crud_firebase_app/views/update_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,22 +42,59 @@ class _DataListScreenState extends State<DataListScreen> {
             } else if (_fetchDataController.datalist.isEmpty) {
               return Center(child: Text('No data available.'));
             } else {
-              return ListView.builder(
+              return ListView.separated(
+
                 itemCount: _fetchDataController.datalist.length,
                 itemBuilder: (context, index) {
-                  DataListModel data = _fetchDataController.datalist[index];
+                  // DataListModel data = _fetchDataController.datalist[index];
                   return ListTile(
-                    title: Text('ID: ${data.id}'),
+                    tileColor: Colors.grey.withOpacity(0.3),
+                    leading: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          _fetchDataController.datalist[index].id.toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    title: Text('ID: ${_fetchDataController.datalist[index].id}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Title: ${data.title}'),
-                        Text('Details: ${data.textDetails}'),
+                        Text('Title: ${_fetchDataController.datalist[index].title}'),
+                        Text('Details: ${_fetchDataController.datalist[index].textDetails}'),
                         // Add other details as needed
                       ],
                     ),
+                    trailing: SizedBox(
+                      width: 100,
+                      child: Row(
+                        children: [
+                          IconButton(onPressed: (){
+                            Get.to(()=> UpdateScreen(id: _fetchDataController.datalist[index].id!, title:_fetchDataController.datalist[index].title!, textDetails: _fetchDataController.datalist[index].textDetails!,));
+                          }, icon: const Icon(Icons.edit),),
+                          const Spacer(),
+                          IconButton(onPressed: (){
+                            // Get.find<FetchDataController>().deleteData(id: _fetchDataController.dataList[index].id!);
+                            // Get.find<FetchDataController>().fetchData();
+                            Get.snackbar("Successful", "Data has been delete");
+                          }, icon: const Icon(Icons.delete),)
+                        ],
+                      ),
+                    ),
                   );
-                },
+                }, separatorBuilder: (BuildContext context, int index) => SizedBox(height: 8.0,),
               );
             }
           },

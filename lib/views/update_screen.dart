@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_firebase_app/controllers/update_data_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -77,6 +79,20 @@ class _UpdateScreenState extends State<UpdateScreen> {
               ),
 
                      ElevatedButton(onPressed: () async{
+                       UpdateDataController _updateDataController = Get.put(UpdateDataController());
+
+                      final response =  await _updateDataController.updatedData(
+                         id: int.parse(_idTEController.text.trim()),
+                         title: _titleTEController.text.trim(),
+                         textDetails: _textDetailTEController.text.trim(),
+                       );
+                      if(response == true){
+                        _idTEController.clear();
+                        _titleTEController.clear();
+                        _textDetailTEController.clear();
+                        Get.snackbar("Successful", "Data has been update");
+                        Navigator.pop(context);
+                      }
 
                     }, child: const Text("Update Screen")),
 

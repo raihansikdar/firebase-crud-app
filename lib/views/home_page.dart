@@ -1,3 +1,4 @@
+import 'package:crud_firebase_app/controllers/add_data_controller.dart';
 import 'package:crud_firebase_app/views/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _titleTEController = TextEditingController();
   TextEditingController _textDetailsTEController = TextEditingController();
 
+  AddDataController _addDataController = Get.put(AddDataController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +26,7 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Column(
+          child:  Column(
             children: [
               const SizedBox(
                 height: 10,
@@ -67,10 +69,17 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                        ElevatedButton(onPressed: () async{
+                  ElevatedButton(
+                     onPressed: () async{
+                       await _addDataController.addData(id: int.parse(_idTEController.text.trim()), title: _titleTEController.text.trim(), textDetails: _textDetailsTEController.text.trim()).then((value) {
 
-                        }, child: const Text("Add Data")),
+                         _idTEController.clear();
+                         _titleTEController.clear();
+                         _textDetailsTEController.clear();
+                         Get.snackbar("Successful", "Data has been added in database");
+                       });
 
+                     }, child: const Text("Add Data")),
 
                   const SizedBox(
                     width: 20,
@@ -81,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               )
             ],
-          ),
+          )
         ),
       ),
     );
