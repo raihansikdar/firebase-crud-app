@@ -3,31 +3,37 @@ import 'package:crud_firebase_app/controllers/update_data_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class UpdateScreen extends StatefulWidget {
-  final int id;
+  final String documetId;
   final String title;
   final String textDetails;
-  const UpdateScreen({Key? key, required this.id, required this.title, required this.textDetails}) : super(key: key);
+
+  const UpdateScreen(
+      {Key? key,
+      required this.documetId,
+      required this.title,
+      required this.textDetails})
+      : super(key: key);
 
   @override
   State<UpdateScreen> createState() => _UpdateScreenState();
 }
 
 class _UpdateScreenState extends State<UpdateScreen> {
-  TextEditingController _idTEController = TextEditingController();
   TextEditingController _titleTEController = TextEditingController();
   TextEditingController _textDetailTEController = TextEditingController();
+
+  UpdateDataController _updateDataController = Get.put(UpdateDataController());
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _idTEController.text = widget.id.toString();
       _titleTEController.text = widget.title;
       _textDetailTEController.text = widget.textDetails;
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,16 +45,6 @@ class _UpdateScreenState extends State<UpdateScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _idTEController,
-                decoration: const InputDecoration(
-                  labelText: "Id",
-                  border: OutlineInputBorder(),
-                ),
-              ),
               const SizedBox(
                 height: 10,
               ),
@@ -77,25 +73,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
               const SizedBox(
                 height: 10,
               ),
-
-                     ElevatedButton(onPressed: () async{
-                       UpdateDataController _updateDataController = Get.put(UpdateDataController());
-
-                      final response =  await _updateDataController.updatedData(
-                         id: int.parse(_idTEController.text.trim()),
-                         title: _titleTEController.text.trim(),
-                         textDetails: _textDetailTEController.text.trim(),
-                       );
-                      if(response == true){
-                        _idTEController.clear();
-                        _titleTEController.clear();
-                        _textDetailTEController.clear();
-                        Get.snackbar("Successful", "Data has been update");
-                        Navigator.pop(context);
-                      }
-
-                    }, child: const Text("Update Screen")),
-
+              ElevatedButton(
+                  onPressed: () async {
+                    final response = await _updateDataController.updatedData(
+                      documentId: widget.documetId,
+                      title: _titleTEController.text.trim(),
+                      textDetails: _textDetailTEController.text.trim(),
+                    );
+                    if (response == true) {
+                      _titleTEController.clear();
+                      _textDetailTEController.clear();
+                      Get.snackbar("Successful", "Data has been update");
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text("Update Screen")),
             ],
           ),
         ),

@@ -7,10 +7,9 @@ class AddDataController extends GetxController{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<bool> addData({required int id,required String title, required String textDetails})async{
+  Future<bool> addData({required String title, required String textDetails})async{
     try{
        await _firestore.collection('info_details').add({
-         'id': id,
          'title': title,
          'textDetails': textDetails,
        });

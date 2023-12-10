@@ -1,5 +1,5 @@
 class DataListModel {
-  final int? id;
+  final String? id;
   final String? title;
   final String? textDetails;
 
@@ -9,9 +9,9 @@ class DataListModel {
     this.textDetails,
   });
 
-  factory DataListModel.fromJson(Map<String, dynamic> json) {
+  factory DataListModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return DataListModel(
-      id: json['id'],
+      id: id,
       title: json['title'],
       textDetails: json['textDetails'],
     );

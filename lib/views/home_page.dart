@@ -32,16 +32,6 @@ class _HomePageState extends State<HomePage> {
                 height: 10,
               ),
               TextFormField(
-                controller: _idTEController,
-                decoration: const InputDecoration(
-                  labelText: "Id",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
                 controller: _titleTEController,
                 decoration: const InputDecoration(
                   labelText: "Title",
@@ -71,9 +61,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   ElevatedButton(
                      onPressed: () async{
-                       await _addDataController.addData(id: int.parse(_idTEController.text.trim()), title: _titleTEController.text.trim(), textDetails: _textDetailsTEController.text.trim()).then((value) {
-
-                         _idTEController.clear();
+                       await _addDataController.addData( title: _titleTEController.text.trim(), textDetails: _textDetailsTEController.text.trim()).then((value) {
                          _titleTEController.clear();
                          _textDetailsTEController.clear();
                          Get.snackbar("Successful", "Data has been added in database");

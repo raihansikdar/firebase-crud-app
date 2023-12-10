@@ -15,13 +15,13 @@ class DataListScreen extends StatefulWidget {
 class _DataListScreenState extends State<DataListScreen> {
   final FetchDataController _fetchDataController = Get.put(FetchDataController());
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _fetchDataController.getData();
-    });
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     _fetchDataController.getData();
+  //   });
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +29,8 @@ class _DataListScreenState extends State<DataListScreen> {
         title: const Text("Data List"),
         actions: [
           IconButton(onPressed: () async{
-
-
+         _fetchDataController.deleteAllData();
+          _fetchDataController.getData();
           }, icon: const Icon(Icons.delete))
         ],
       ),
@@ -43,10 +43,10 @@ class _DataListScreenState extends State<DataListScreen> {
               return Center(child: Text('No data available.'));
             } else {
               return ListView.separated(
-
                 itemCount: _fetchDataController.datalist.length,
                 itemBuilder: (context, index) {
                   // DataListModel data = _fetchDataController.datalist[index];
+                  print('length: ${_fetchDataController.datalist.length}');
                   return ListTile(
                     tileColor: Colors.grey.withOpacity(0.3),
                     leading: Container(
@@ -59,7 +59,7 @@ class _DataListScreenState extends State<DataListScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Text(
-                          _fetchDataController.datalist[index].id.toString(),
+                          _fetchDataController.datalist[index].id!,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 18,
@@ -68,7 +68,7 @@ class _DataListScreenState extends State<DataListScreen> {
                         ),
                       ),
                     ),
-                    title: Text('ID: ${_fetchDataController.datalist[index].id}'),
+                    title: Text('ID: ${ _fetchDataController.datalist[index].id}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -82,12 +82,12 @@ class _DataListScreenState extends State<DataListScreen> {
                       child: Row(
                         children: [
                           IconButton(onPressed: (){
-                            Get.to(()=> UpdateScreen(id: _fetchDataController.datalist[index].id!, title:_fetchDataController.datalist[index].title!, textDetails: _fetchDataController.datalist[index].textDetails!,));
+                            Get.to(()=> UpdateScreen(documetId: _fetchDataController.datalist[index].id!, title:_fetchDataController.datalist[index].title!, textDetails: _fetchDataController.datalist[index].textDetails!,));
                           }, icon: const Icon(Icons.edit),),
                           const Spacer(),
                           IconButton(onPressed: (){
-                            // Get.find<FetchDataController>().deleteData(id: _fetchDataController.dataList[index].id!);
-                            // Get.find<FetchDataController>().fetchData();
+                            _fetchDataController.deleteData(documentId: _fetchDataController.datalist[index].id!);
+                            _fetchDataController.getData();
                             Get.snackbar("Successful", "Data has been delete");
                           }, icon: const Icon(Icons.delete),)
                         ],
